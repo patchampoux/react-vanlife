@@ -1,9 +1,9 @@
-import React from "react";
+import React from "react"
 
-export default function footer() {
-	const currentYear = new Date().getFullYear();
+export default function Footer() {
+	const year = new Date().getFullYear();
 
 	return (
-		<footer>&#169; {currentYear} #VANLIFE</footer>
-	);
+		<footer>&#169; {year} #VANLIFE</footer>
+	)
 }
