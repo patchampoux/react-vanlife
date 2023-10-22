@@ -1,36 +1,13 @@
 import React from "react"
-import {useParams, Link, NavLink, Outlet} from "react-router-dom"
+import {Link, NavLink, Outlet, useLoaderData} from "react-router-dom"
 import {getVan} from "../../api"
 
+export function loader({params}) {
+	return getVan(params.id);
+}
+
 export default function HostVanDetail() {
-	const [currentVan, setCurrentVan] = React.useState(null)
-	const [loading, setLoading] = React.useState(false)
-	const [error, setError] = React.useState(null)
-	const {id} = useParams()
-
-	React.useEffect(() => {
-		async function loadVans() {
-			setLoading(true)
-			try {
-				const data = await getVan(id)
-				setCurrentVan(data)
-			} catch (err) {
-				setError(err)
-			} finally {
-				setLoading(false)
-			}
-		}
-
-		loadVans()
-	}, [id])
-
-	if (loading) {
-		return <h1>Loading...</h1>
-	}
-
-	if (error) {
-		return <h1>There was an error: {error.message}</h1>
-	}
+	const van = useLoaderData();
 
 	const activeStyles = {
 		fontWeight: "bold",
@@ -45,18 +22,18 @@ export default function HostVanDetail() {
 				relative="path"
 				className="back-button"
 			>&larr; <span>Back to all vans</span></Link>
-			{currentVan &&
+			{van &&
 				<div className="host-van-detail-layout-container">
 					<div className="host-van-detail">
-						<img src={currentVan.imageUrl}/>
+						<img src={van.imageUrl} alt={`Photo of ${van.name}`}/>
 						<div className="host-van-detail-info-text">
 							<i
-								className={`van-type van-type-${currentVan.type}`}
+								className={`van-type van-type-${van.type}`}
 							>
-								{currentVan.type}
+								{van.type}
 							</i>
-							<h3>{currentVan.name}</h3>
-							<h4>${currentVan.price}/day</h4>
+							<h3>{van.name}</h3>
+							<h4>${van.price}/day</h4>
 						</div>
 					</div>
 
@@ -81,7 +58,7 @@ export default function HostVanDetail() {
 							Photos
 						</NavLink>
 					</nav>
-					<Outlet context={{currentVan}}/>
+					<Outlet context={{van}}/>
 				</div>}
 		</section>
 	)
