@@ -27,8 +27,6 @@ export async function getVan(id) {
 	const docRef = doc(db, "vans", id);
 	const snapshot = await getDoc(docRef);
 
-	console.log(snapshot);
-
 	return {
 		...snapshot.data(),
 		id: snapshot.id
